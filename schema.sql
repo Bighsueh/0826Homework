@@ -45,8 +45,35 @@ CREATE TABLE permission_assignment (
     user_id serial REFERENCES users(user_id),
     routine_id bigserial REFERENCES routines(routine_id),
     permission_id serial REFERENCES user_permissions(permission_id),
-    authorizer serial REFERENCES users(user_id),
+    authorized_by serial REFERENCES users(user_id),
     assignment_uuid UUID,
+    created_at timestamp,
+    updated_at timestamp
+);
+
+CREATE TABLE groups(
+    group_id bigserial PRIMARY KEY,
+    group_name varchar(255),
+    group_description varchar(255),
+    group_uuid UUID,
+    created_at timestamp,
+    updated_at timestamp
+)
+
+CREATE TABLE memberships(
+    membership_id bigserial PRIMARY KEY,
+    user_id serial REFERENCES users(user_id),
+    group_id serial REFERENCES groups(group_id),
+    authorized_by serial REFERENCES users(user_id),
+    created_at timestamp,
+    updated_at timestamp
+)
+
+CREATE TABLE group_hierachy (
+    hierachy_id bigserial PRIMARY KEY,
+    parent_group_id bigserial REFERENCES groups(group_id),
+    child_group_id bigserial REFERENCES groups(group_id),
+    hierachy_uuid UUID,
     created_at timestamp,
     updated_at timestamp
 );
